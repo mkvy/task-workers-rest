@@ -1,0 +1,20 @@
+version: '2.1'
+services:
+  database:
+    image: postgres:alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB:       "workdb_dev"
+      PG_DATA: /var/lib/postgresql/data
+    volumes:
+      - ./dbdata:/var/lib/postgresql/data
+    networks:
+      backend:
+        aliases:
+          - "database"
+networks:
+  backend:
+    driver: bridge
