@@ -1,0 +1,3 @@
+INSERT into workers(name_w,position_p,avatar_image) values ('Testov Name', 'develop', cast('abc' as bytea));
+INSERT into tasks(id,title,description,time_t,status,performer_id) values (1,'First task','Description of first task', CURRENT_TIMESTAMP, 'pending',1);
+INSERT into tasks(id,title,description,time_t,status,performer_id) values (2,'Second task','Description of second task', CURRENT_TIMESTAMP, 'working',1);
