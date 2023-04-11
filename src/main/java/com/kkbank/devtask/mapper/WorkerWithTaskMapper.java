@@ -13,10 +13,10 @@ public class WorkerWithTaskMapper implements RowMapper<WorkerWithTask>{
 
     @Override
     public WorkerWithTask mapRow(ResultSet rs, int rowNum) throws SQLException {
-        return new WorkerWithTask(rs.getLong("id"),
+        return new WorkerWithTask(new Worker(rs.getLong("id"),
                 rs.getString("name_w"),
                 rs.getString("position_p"),
-                rs.getBytes("avatar_image"),
+                rs.getBytes("avatar_image")),
                 new ShortTask(rs.getLong("task_id"),rs.getString("title"),rs.getString("status"))
                 );
     }

@@ -41,8 +41,9 @@ public class WorkerController {
         return ResponseEntity.ok(workerService.GetAllWithTasks());
     }
 
-    @PutMapping("/")
-    public ResponseEntity<Integer> Update(@RequestBody Worker request) {
+    @PutMapping("/{id}")
+    public ResponseEntity<Integer> Update(@PathVariable("id") long id, @RequestBody Worker request) {
+        request.setId(id);
         int rowsUpdated = workerService.Update(request);
         if (rowsUpdated == 0) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(rowsUpdated);
@@ -56,6 +57,6 @@ public class WorkerController {
         if (rowsDeleted == 0) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(rowsDeleted);
         }
-        return ResponseEntity.ok(rowsDeleted);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(rowsDeleted);
     }
 }
