@@ -3,21 +3,21 @@ package com.kkbank.devtask.service;
 import com.kkbank.devtask.model.ShortTask;
 import com.kkbank.devtask.model.Task;
 import com.kkbank.devtask.repository.TaskRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.concurrent.*;
 
 @Service
 public class TaskService {
     @Autowired
     TaskRepository taskRepository;
-
+    private static final Logger log = LoggerFactory.getLogger(TaskService.class);
     private BlockingQueue<Task> taskQueue = new LinkedBlockingQueue<>();
 
     @PostConstruct
@@ -26,6 +26,8 @@ public class TaskService {
     }
 
     public void SaveInQueue(Task task) {
+        log.debug("Adding task in queue");
+
         taskQueue.add(task);
     }
 
@@ -35,12 +37,11 @@ public class TaskService {
             while (true) {
                 Task task = taskQueue.poll();
                 if (task != null) {
-                    System.out.println("Adding task");
+                    log.debug("Received task from queue and put into buffer");
                     tasks.add(task);
                 }
                 if (!tasks.isEmpty() && tasks.size() >= 3) {
                     saveTasks(tasks);
-                    System.out.println("saving tasks of");
                     tasks = new ArrayList<>();
                 } else {
                     try {
@@ -54,6 +55,7 @@ public class TaskService {
     }
 
     private void saveTasks(List<Task> tasks) {
+        log.debug("Saving tasks of size ", tasks.size());
         ExecutorService executorService = Executors.newFixedThreadPool(3);
         for (Task task : tasks) {
             executorService.submit(() -> Create(task));
@@ -67,7 +69,9 @@ public class TaskService {
     }
 
 
-    public List<ShortTask> GetAllShortTasks() { return taskRepository.GetAllShorts(); }
+    public List<ShortTask> GetAllShortTasks() {
+        return taskRepository.GetAllShorts();
+    }
 
     public void Create(Task model) {
         taskRepository.Create(model);

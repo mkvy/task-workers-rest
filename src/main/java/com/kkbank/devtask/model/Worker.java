@@ -7,7 +7,6 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-@Builder
 public class Worker {
     private long id;
 

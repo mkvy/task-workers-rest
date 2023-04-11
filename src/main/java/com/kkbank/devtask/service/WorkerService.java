@@ -14,9 +14,8 @@ public class WorkerService {
     @Autowired
     WorkerRepository workerRepository;
 
-    public Void Create(Worker model) {
+    public void Create(Worker model) {
         workerRepository.Create(model);
-        return null;
     }
 
     public List<Worker> GetAll() {

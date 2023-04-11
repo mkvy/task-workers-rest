@@ -2,8 +2,9 @@ package com.kkbank.devtask.controller;
 
 import com.kkbank.devtask.model.ShortTask;
 import com.kkbank.devtask.model.Task;
-import com.kkbank.devtask.model.Worker;
 import com.kkbank.devtask.service.TaskService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,15 +18,18 @@ public class TaskController {
 
     @Autowired
     TaskService taskService;
+    private static final Logger log = LoggerFactory.getLogger(TaskController.class);
 
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<Void> Create(@RequestBody Task request) {
+        log.debug("Received POST /api/v1/task request");
         taskService.SaveInQueue(request);
-        return ResponseEntity.status(201).body(null);
+        return ResponseEntity.status(200).body(null);
     }
 
-    @GetMapping("/short")
+    @GetMapping("")
     public ResponseEntity<List<ShortTask>> GetShortList() {
+        log.debug("Received GET /api/v1/task request");
         List<ShortTask> lst = taskService.GetAllShortTasks();
         if (lst.size() == 0) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(lst);
